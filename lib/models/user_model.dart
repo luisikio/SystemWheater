@@ -1,27 +1,25 @@
 class UserModel {
-  final String name;
-  final String apellido;
-  final String telefono;
-  final String email;
-  final String rool;
-  final String uid;
+  String? uid;
+  String? name;
+  String? apellido;
+  String? telefono;
+  String? email;
+  String? rool;
 
-  UserModel({
-    required this.email,
-    required this.name,
-    required this.apellido,
-    required this.telefono,
-    required this.rool,
-    required this.uid,
-  });
-
+  UserModel(
+      {this.uid,
+      this.name,
+      this.apellido,
+      this.telefono,
+      this.email,
+      this.rool});
   factory UserModel.fromMap(map) {
     return UserModel(
       uid: map?['uid'],
       name: map?['name'],
       apellido: map?['apellido'],
-      email: map?['email'],
       telefono: map?['telefono'],
+      email: map?['email'],
       rool: map?['rool'],
     );
   }
@@ -36,4 +34,13 @@ class UserModel {
       'rool': rool,
     };
   }
+
+  static UserModel fromJson(Map<String, dynamic> json) => UserModel(
+        uid: json['uid'],
+        name: json['name'],
+        apellido: json['apellido'],
+        telefono: json['telefono'],
+        email: json['email'],
+        rool: json['rool'],
+      );
 }
