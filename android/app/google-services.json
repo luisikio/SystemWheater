@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "155919523006",
+    "project_id": "sistemaweather",
+    "storage_bucket": "sistemaweather.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155919523006:android:817922007903b3886b52ef",
+        "android_client_info": {
+          "package_name": "com.example.sistem_weatherv2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "155919523006-dm0v55qba9he9afmironblae62tv07c8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJpNBlMXrsGjGYhDZptoEDqRjHCIjig5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "155919523006-dm0v55qba9he9afmironblae62tv07c8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
