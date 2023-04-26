@@ -20,16 +20,6 @@ class _HomeLogueadoScreenState extends State<HomeLogueadoMobileScreen> {
   final user = FirebaseAuth.instance.currentUser;
 
   //documentsIDS
-  List<String> docIds = [];
-  //GET docsIDS
-  Future getDocIds() async {
-    await FirebaseFirestore.instance.collection('user').get().then(
-          (snapshot) => snapshot.docs.forEach((document) {
-            print(document.reference);
-            docIds.add(document.reference.id);
-          }),
-        );
-  }
 
   // @override
   // void initState() {
@@ -37,6 +27,8 @@ class _HomeLogueadoScreenState extends State<HomeLogueadoMobileScreen> {
   //   super.initState();
   // }
 
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('user').snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,17 +47,30 @@ class _HomeLogueadoScreenState extends State<HomeLogueadoMobileScreen> {
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.grey[400],
                 ),
-                child: FutureBuilder(
-                  future: getDocIds(),
-                  builder: (context, snapshot) {
-                    return ListView.builder(
-                      itemCount: docIds.length,
-                      itemBuilder: (context, index) {
-                        final item = docIds[index];
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _usersStream,
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return ListView(
+                      children:
+                          snapshot.data!.docs.map((DocumentSnapshot document) {
+                        Map<String, dynamic> data =
+                            document.data()! as Map<String, dynamic>;
                         return ListTile(
-                          title: ReadUser(documenId: item),
+                          title: Text(data['name'] + '  ' + data['apellido']),
+                          subtitle: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(data['email']),
+                              Text(data['rool']),
+                            ],
+                          ),
                         );
-                      },
+                      }).toList(),
                     );
                   },
                 ),

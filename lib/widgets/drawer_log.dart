@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../constants/constants.dart';
 import '../routes/routes.dart';
 
-class DraweLog extends StatelessWidget {
+class DraweLog extends StatefulWidget {
   const DraweLog({
     super.key,
     required this.user,
@@ -12,6 +12,11 @@ class DraweLog extends StatelessWidget {
 
   final User? user;
 
+  @override
+  State<DraweLog> createState() => _DraweLogState();
+}
+
+class _DraweLogState extends State<DraweLog> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -60,7 +65,7 @@ class DraweLog extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                Text(' ${user?.email}'),
+                Text(' ${widget.user?.email}'),
                 MaterialButton(
                   onPressed: () {
                     Navigator.pushNamedAndRemoveUntil(

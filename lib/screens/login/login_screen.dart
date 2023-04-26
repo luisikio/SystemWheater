@@ -28,13 +28,16 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  FocusNode a = FocusNode();
+  FocusNode b = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(20),
           padding: const EdgeInsets.all(20),
@@ -45,15 +48,23 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const Text('Login'),
               //email
-              TextField(
+              TextFormField(
+                focusNode: a,
                 controller: _emailController,
+                onFieldSubmitted: (value) {
+                  FocusScope.of(context).requestFocus(b);
+                },
               ),
               const SizedBox(
                 height: 20,
               ),
               //password
-              TextField(
+              TextFormField(
+                focusNode: b,
                 controller: _passwordController,
+                onFieldSubmitted: (value) {
+                  FocusScope.of(context).requestFocus(a);
+                },
               ),
               const SizedBox(
                 height: 20,
@@ -70,7 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Text('ingresar'),
                 ),
               ),
-             
             ],
           ),
         ),

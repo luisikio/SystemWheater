@@ -45,116 +45,120 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         title: Text("${arguments}"),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Form(
-            key: _formkey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //name
-                TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    hintText: 'name',
-                  ),
-                ),
-                const SizedBox(height: 20),
-                //apellido
-                TextFormField(
-                  controller: _apellidoController,
-                  decoration: const InputDecoration(
-                    hintText: 'apellido',
-                  ),
-                ),
-                const SizedBox(height: 20),
-                //email
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    hintText: 'email',
-                  ),
-                  onChanged: (value) {},
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 20),
-                //telefono
-                TextFormField(
-                  controller: _telefonoController,
-                  decoration: const InputDecoration(
-                    hintText: 'telefono',
-                  ),
-                ),
-                const SizedBox(height: 20),
-                //password
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    hintText: 'password',
-                  ),
-                  onChanged: (value) {},
-                ),
-                const SizedBox(height: 20),
-                //confirmarPassword
-                TextFormField(
-                  controller: _confirpasswordController,
-                  decoration: const InputDecoration(
-                    hintText: 'confirmarPassword',
-                  ),
-                  validator: (value) {
-                    if (_confirpasswordController.text !=
-                        _passwordController.text) {
-                      return "Password did not match";
-                    } else {
-                      return null;
-                    }
-                  },
-                  onChanged: (value) {},
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('ROL'),
-                    const SizedBox(width: 20),
-                    DropdownButton<String>(
-                      value: rool,
-                      items: options
-                          .map(
-                            (item) => DropdownMenuItem(
-                              value: item,
-                              child: Text(item),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _currentItemSelected = value!;
-                          rool = value;
-                        });
-                      },
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              key: _formkey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //name
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      hintText: 'name',
                     ),
-                  ],
-                ),
-                MaterialButton(
-                  onPressed: () {
-                    const CircularProgressIndicator();
-                    setState(() {
-                      showProgress = true;
-                    });
-                    signUp(
+                  ),
+                  const SizedBox(height: 20),
+                  //apellido
+                  TextFormField(
+                    controller: _apellidoController,
+                    decoration: const InputDecoration(
+                      hintText: 'apellido',
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  //email
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      hintText: 'email',
+                    ),
+                    onChanged: (value) {},
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  const SizedBox(height: 20),
+                  //telefono
+                  TextFormField(
+                    controller: _telefonoController,
+                    decoration: const InputDecoration(
+                      hintText: 'telefono',
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  //password
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(
+                      hintText: 'password',
+                    ),
+                    onChanged: (value) {},
+                  ),
+                  const SizedBox(height: 20),
+                  //confirmarPassword
+                  TextFormField(
+                    controller: _confirpasswordController,
+                    decoration: const InputDecoration(
+                      hintText: 'confirmarPassword',
+                    ),
+                    validator: (value) {
+                      if (_confirpasswordController.text !=
+                          _passwordController.text) {
+                        return "Password did not match";
+                      } else {
+                        return null;
+                      }
+                    },
+                    onChanged: (value) {},
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('ROL'),
+                      const SizedBox(width: 20),
+                      DropdownButton<String>(
+                        value: rool,
+                        items: options
+                            .map(
+                              (item) => DropdownMenuItem(
+                                value: item,
+                                child: Text(item),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _currentItemSelected = value!;
+                            rool = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  MaterialButton(
+                    onPressed: () {
+                      const CircularProgressIndicator();
+                      setState(() {
+                        showProgress = true;
+                      });
+                      signUp(
                         _emailController.text,
                         _passwordController.text,
                         rool,
                         _nameController.text,
                         _apellidoController.text,
-                        _telefonoController.text);
-                  },
-                  color: Colors.amber,
-                  child: const Text('registrar'),
-                )
-              ],
+                        _telefonoController.text,
+                      );
+                      //_nameController.clear();
+                    },
+                    color: Colors.amber,
+                    child: const Text('registrar'),
+                  )
+                ],
+              ),
             ),
           ),
         ),
