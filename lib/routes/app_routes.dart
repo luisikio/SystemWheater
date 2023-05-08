@@ -4,6 +4,7 @@ import 'package:sistem_weatherv2/screens/homelogueado/home_logueado.dart';
 import 'package:sistem_weatherv2/screens/homelogueado/home_logueado_mobile.dart';
 import 'package:sistem_weatherv2/screens/homelogueado/home_logueado_web.dart';
 import 'package:sistem_weatherv2/screens/register/register_screen.dart';
+import 'package:sistem_weatherv2/screens/users_screen/home_screen_user.dart';
 
 import '../screens/home_screen.dart';
 import '../screens/login/login_screen.dart';
@@ -16,5 +17,6 @@ Map<String, Widget Function(BuildContext)> get appRoutes {
     Routes.homelogueadoWeb: (context) => const HomeLogeuadoWebScreen(),
     Routes.homelogueadoMobile: (context) => const HomeLogueadoMobileScreen(),
     Routes.registro: (context) => const RegisterScreen(),
+    Routes.homeuserscreen: (context) => const HomeScreenUsers(),
   };
 }

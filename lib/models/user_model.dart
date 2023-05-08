@@ -1,3 +1,5 @@
+import 'package:sistem_weatherv2/models/jass_model.dart';
+
 class UserModel {
   String? uid;
   String? name;
@@ -5,6 +7,8 @@ class UserModel {
   String? telefono;
   String? email;
   String? rool;
+  String? jass;
+  //JassModel? jassModel;
 
   UserModel(
       {this.uid,
@@ -12,7 +16,10 @@ class UserModel {
       this.apellido,
       this.telefono,
       this.email,
-      this.rool});
+      this.rool,
+      this.jass
+      //this.jassModel,
+      });
   factory UserModel.fromMap(map) {
     return UserModel(
       uid: map?['uid'],
@@ -21,6 +28,10 @@ class UserModel {
       telefono: map?['telefono'],
       email: map?['email'],
       rool: map?['rool'],
+      jass: map?['jass'],
+      // jassModel: map?['jassModel'],
+      // jassModel: map?['jassModel'],
+      // jassModel: JassModel.fromMap(map['provincia']),
     );
   }
 
@@ -32,6 +43,8 @@ class UserModel {
       'telefono': telefono,
       'email': email,
       'rool': rool,
+      'jass': jass,
+      //'jassModel': jassModel,
     };
   }
 
@@ -42,5 +55,7 @@ class UserModel {
         telefono: json['telefono'],
         email: json['email'],
         rool: json['rool'],
+        jass: json['jass'],
+        //jassModel: json['jassModel'],
       );
 }

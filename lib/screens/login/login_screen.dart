@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
               GestureDetector(
                 onTap: () async {
                   await singIn().then((_) => Navigator.pushNamedAndRemoveUntil(
-                      context, Routes.homelogueado, (route) => false));
+                      context, Routes.homeuserscreen, (route) => false));
                 },
                 child: Container(
                   height: 30,

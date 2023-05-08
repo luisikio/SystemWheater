@@ -6,4 +6,5 @@ class Routes {
   static const homelogueadoMobile = '/homelogueadoMobile';
   static const homelogueadoWeb = '/homelogueadoWeb';
   static const registro = '/registro';
+  static const homeuserscreen = '/userhome';
 }

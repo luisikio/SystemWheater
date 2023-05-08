@@ -2,12 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:sistem_weatherv2/constants/constants.dart';
-import 'package:sistem_weatherv2/models/user_model.dart';
-import 'package:sistem_weatherv2/readData/read_user.dart';
-import 'package:sistem_weatherv2/routes/routes.dart';
-
-import '../../widgets/drawer_log.dart';
 
 class HomeLogueadoMobileScreen extends StatefulWidget {
   const HomeLogueadoMobileScreen({Key? key}) : super(key: key);
@@ -19,14 +13,6 @@ class HomeLogueadoMobileScreen extends StatefulWidget {
 class _HomeLogueadoScreenState extends State<HomeLogueadoMobileScreen> {
   final user = FirebaseAuth.instance.currentUser;
 
-  //documentsIDS
-
-  // @override
-  // void initState() {
-  //   getDocIds();
-  //   super.initState();
-  // }
-
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('user').snapshots();
   @override
@@ -35,7 +21,6 @@ class _HomeLogueadoScreenState extends State<HomeLogueadoMobileScreen> {
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      drawer: DraweLog(user: user),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

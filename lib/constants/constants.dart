@@ -10,6 +10,6 @@ final draweList = [
 ];
 
 final draweListLog = [
-  // DrawerList(title: 'Registro Jass', icon: Icons.app_registration),
+  DrawerList(title: 'Registro Jass', icon: Icons.app_registration),
   DrawerList(title: 'Registro Usuarios', icon: Icons.verified_user),
 ];
