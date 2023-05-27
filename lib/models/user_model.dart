@@ -1,5 +1,3 @@
-import 'package:sistem_weatherv2/models/jass_model.dart';
-
 class UserModel {
   String? uid;
   String? name;

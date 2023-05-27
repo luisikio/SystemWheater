@@ -1,13 +1,18 @@
 // ignore_for_file: unused_field, use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:sistem_weatherv2/models/jass_model.dart';
 import 'package:sistem_weatherv2/models/lista_jass.dart';
 
 import 'package:sistem_weatherv2/screens/users_screen/super_admin/super_admin_screen.dart';
 
+import '../../models/password_alea.dart';
 import '../../models/user_model.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -18,12 +23,26 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  /// generate password aleatorio
+  List<String> generatedPasswords = [];
+  final generator = PasswordGenerator();
+
+  String currentPassword = '';
+
+  TextEditingController passwordController = TextEditingController();
+
+  void generateNewPassword() {
+    String password = generator.generatePassword(8);
+    setState(() {
+      passwordController.text = password;
+    });
+  }
+
   //////
   ///bool showProgress = false;
   bool showProgress = false;
   // ignore:
   final _formkey = GlobalKey<FormState>();
-  final _auth = FirebaseAuth.instance;
 
   CollectionReference ref = FirebaseFirestore.instance.collection('users');
   final _nameController = TextEditingController();
@@ -38,7 +57,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   List<String> options = [
     'admin',
-    'superadmin',
+    'atm',
+    'ingespecialista',
     'operario',
   ];
 
@@ -49,8 +69,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var provincia = '';
 
   @override
+  void initState() {
+    super.initState();
+    generateNewPassword();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  final user = FirebaseAuth.instance.currentUser;
+  FocusNode a = FocusNode();
+  FocusNode b = FocusNode();
+  bool _obscureText = true;
+  bool _obscureText2 = true;
+  @override
   Widget build(BuildContext context) {
     var arguments = ModalRoute.of(context)!.settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("$arguments"),
@@ -60,16 +100,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               key: _formkey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   //name
+
                   arguments == 'Registro Usuarios'
-                      ? TextFormField(
-                          controller: _nameController,
-                          decoration: const InputDecoration(
-                            hintText: 'name',
+                      ? Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffb4b4b4).withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: TextFormField(
+                            controller: _nameController,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              labelText: 'Nombres',
+                              hintText: 'nombres',
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            validator: (value) {
+                              return (value != null && value.length >= 2)
+                                  ? null
+                                  : 'Ingrese nombres para registrar';
+                            },
                           ),
                         )
                       : TextFormField(
@@ -81,63 +141,182 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(height: 20),
                   //apellido
                   arguments == 'Registro Usuarios'
-                      ? TextFormField(
-                          controller: _apellidoController,
-                          decoration: const InputDecoration(
-                            hintText: 'apellido',
+                      ? Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffb4b4b4).withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: TextFormField(
+                            controller: _apellidoController,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              labelText: 'Apellidos',
+                              hintText: 'apellidos',
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            validator: (value) {
+                              return (value != null && value.length >= 2)
+                                  ? null
+                                  : 'Ingrese apellidos para registrar';
+                            },
                           ),
                         )
                       : const Text(''),
                   const SizedBox(height: 20),
                   //email
                   arguments == 'Registro Usuarios'
-                      ? TextFormField(
-                          controller: _emailController,
-                          decoration: const InputDecoration(
-                            hintText: 'email',
+                      ? Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffb4b4b4).withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          onChanged: (value) {},
-                          keyboardType: TextInputType.emailAddress,
+                          child: TextFormField(
+                            controller: _emailController,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'abc@gmail.com',
+                              labelText: 'Correo electrónico',
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            validator: (value) {
+                              String pattern =
+                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                              RegExp regExp = RegExp(pattern);
+
+                              return regExp.hasMatch(value ?? '')
+                                  ? null
+                                  : 'Correo electronico invalido';
+                            },
+                            onChanged: (value) {},
+                            keyboardType: TextInputType.emailAddress,
+                          ),
                         )
                       : const Text(''),
                   const SizedBox(height: 20),
                   //telefono
                   arguments == 'Registro Usuarios'
-                      ? TextFormField(
-                          controller: _telefonoController,
-                          decoration: const InputDecoration(
-                            hintText: 'telefono',
+                      ? Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffb4b4b4).withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: TextFormField(
+                            controller: _telefonoController,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              labelText: 'Celular',
+                              hintText: 'Celular',
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            validator: (value) {
+                              String pattern = r'^\+?51[1-9]\d{8}$';
+                              RegExp regExp = RegExp(pattern);
+                              return regExp.hasMatch(value ?? '')
+                                  ? null
+                                  : 'Numero de celular invalido';
+                            },
                           ),
                         )
                       : const Text(''),
                   const SizedBox(height: 20),
+
                   //password
                   arguments == 'Registro Usuarios'
-                      ? TextFormField(
-                          controller: _passwordController,
-                          decoration: const InputDecoration(
-                            hintText: 'password',
+                      ? Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffb4b4b4).withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          onChanged: (value) {},
+                          child: TextFormField(
+                            keyboardType: TextInputType.visiblePassword,
+                            autocorrect: false,
+                            obscureText: _obscureText,
+                            focusNode: a,
+                            controller: passwordController,
+                            readOnly: true,
+                            onFieldSubmitted: (value) {
+                              FocusScope.of(context).requestFocus(a);
+                            },
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _obscureText = !_obscureText;
+                                  });
+                                },
+                                icon: Icon(
+                                  _obscureText
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                              ),
+                              border: InputBorder.none,
+                              hintText: '******',
+                              labelText: 'Contraseña',
+                              labelStyle: const TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            onChanged: (value) {},
+                          ),
                         )
                       : const Text(''),
                   const SizedBox(height: 20),
                   //confirmarPassword
                   arguments == 'Registro Usuarios'
-                      ? TextFormField(
-                          controller: _confirpasswordController,
-                          decoration: const InputDecoration(
-                            hintText: 'confirmarPassword',
+                      ? Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffb4b4b4).withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          validator: (value) {
-                            if (_confirpasswordController.text !=
-                                _passwordController.text) {
-                              return "Password did not match";
-                            } else {
-                              return null;
-                            }
-                          },
-                          onChanged: (value) {},
+                          child: TextFormField(
+                            keyboardType: TextInputType.visiblePassword,
+                            autocorrect: false,
+                            obscureText: _obscureText2,
+                            focusNode: b,
+                            controller: passwordController,
+                            readOnly: true,
+                            onFieldSubmitted: (value) {
+                              FocusScope.of(context).requestFocus(b);
+                            },
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _obscureText2 = !_obscureText2;
+                                  });
+                                },
+                                icon: Icon(
+                                  _obscureText2
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                              ),
+                              border: InputBorder.none,
+                              hintText: '******',
+                              labelText: 'Confirmar contraseña',
+                              labelStyle: const TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            onChanged: (value) {},
+                          ),
                         )
                       : const Text(''),
                   const SizedBox(height: 20),
@@ -193,30 +372,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           _currentItemSelectedJass =
                                               item.toString();
                                           provincia = item.toString();
-                                          print(item);
                                         });
                                       },
                                     );
                                   }
                                 }
                               },
-                              // child: DropdownButton<String>(
-                              //   value: rool,
-                              //   items: options
-                              //       .map(
-                              //         (item) => DropdownMenuItem(
-                              //           value: item,
-                              //           child: Text(item),
-                              //         ),
-                              //       )
-                              //       .toList(),
-                              //   onChanged: (value) {
-                              //     setState(() {
-                              //       _currentItemSelected = value!;
-                              //       rool = value;
-                              //     });
-                              //   },
-                              // ),
                             ),
                           ],
                         )
@@ -227,21 +388,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       setState(() {
                         showProgress = true;
                       });
-                      arguments == 'Registro Usuarios'
-                          ? signUp(
-                              _emailController.text,
-                              _passwordController.text,
-                              rool,
-                              _nameController.text,
-                              _apellidoController.text,
-                              _telefonoController.text,
-                              provincia,
-                            )
-                          : jassRegistration(_provinciaController.text);
-                      //_nameController.clear();
+                      if (arguments == 'Registro Usuarios') {
+                        const CircularProgressIndicator();
+                        _passwordController.text = passwordController.text;
+                        signUp(
+                          _emailController.text,
+                          _passwordController.text,
+                          rool,
+                          _nameController.text,
+                          _apellidoController.text,
+                          _telefonoController.text,
+                          provincia,
+                        );
+                      } else {
+                        jassRegistration(_provinciaController.text);
+                      }
                     },
-                    color: Colors.amber,
-                    child: const Text('registrar'),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      alignment: Alignment.center,
+                      height: 50,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: const Color(0xff4861FF),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: const Text(
+                        'Registrar',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -255,27 +434,63 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void signUp(String email, String password, String rool, String name,
       String apellido, String telefono, String provincia) async {
     const CircularProgressIndicator();
-    if (_formkey.currentState!.validate()) {
-      await _auth
-          .createUserWithEmailAndPassword(
-              email: email.toString(), password: password.toString())
-          .then((value) => {
+
+    try {
+      if (_formkey.currentState!.validate()) {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: email.toString(),
+              password: password.toString(),
+            )
+            .then(
+              (value) => {
                 postDetailsToFirestore(
-                    email, rool, name, apellido, telefono, provincia)
-              })
-          .catchError(
-        (e) {
-          // ignore: invalid_return_type_for_catch_error
-          return null;
-        },
-      );
+                  email,
+                  rool,
+                  name,
+                  apellido,
+                  telefono,
+                  provincia,
+                ),
+                sendEmail(
+                  _emailController.text.trim(),
+                  _passwordController.text.trim(),
+                  _nameController.text.trim(),
+                  _apellidoController.text.trim(),
+                  _telefonoController.text.trim(),
+                  rool,
+                  provincia,
+                ),
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AdminScreen(
+                      id: email,
+                    ),
+                  ),
+                ),
+              },
+            );
+      }
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        if (e.code == 'email-already-in-use') {
+          // Manejar el error de correo electrónico en uso
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('El correo electrónico ya está registrado.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     }
   }
 
   postDetailsToFirestore(String email, String rool, String name,
       String apellido, String telefono, String provincia) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    User? user = _auth.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     UserModel userModel = UserModel();
     userModel.name = name;
     userModel.apellido = apellido;
@@ -283,27 +498,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
     userModel.telefono = telefono;
     userModel.rool = rool;
     userModel.jass = provincia;
-    //userModel.jassModel = provincia as JassModel?;
 
     userModel.uid = user!.uid;
     await firebaseFirestore
         .collection("user")
         .doc(user.uid)
         .set(userModel.toMap());
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => SuperAdminScreen(
-          id: 'superadmin',
-        ),
-      ),
-    );
   }
 
   jassRegistration(String provincia) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    //User? user = _auth.currentUser;
+
     JassModel jassModel = JassModel();
     jassModel.uid = provincia;
     jassModel.provincia = provincia;
@@ -315,10 +520,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => SuperAdminScreen(
+        builder: (_) => AdminScreen(
           id: 'superadmin',
         ),
       ),
     );
+  }
+
+  updateDisplayName(String displayName) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        await user.updateDisplayName(displayName);
+        // ignore: empty_catches
+      } catch (e) {}
+    } else {}
+  }
+
+  Future sendEmail(String emails, String password, String nombre,
+      String apellido, String telefono, String rool, String jass) async {
+    const serviceId = 'service_ie50lj9';
+    const templateId = 'template_mlrrebg';
+    const userId = 'FNPXRUrD5nIw_CQcn';
+
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'origin': 'http://localhost',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(
+          {
+            'service_id': serviceId,
+            'user_id': userId,
+            'template_id': templateId,
+            'template_params': {
+              'name': nombre,
+              'message':
+                  'nombre y apellidos: $nombre $apellido\n correo: $emails \n celular: $telefono \n contraseña: $password \n rol asignado: $rool \n Jass: $jass',
+              'sender_email': emails,
+            }
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+      } else {}
+      // ignore: empty_catches
+    } catch (e) {}
   }
 }

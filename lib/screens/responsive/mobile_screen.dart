@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_weatherv2/widgets/body_responsive.dart';
 
-import '../../constants/constants.dart';
-import '../../routes/routes.dart';
+import '../../widgets/drawer_list.dart';
 
 class MobileScreen extends StatelessWidget {
   const MobileScreen({Key? key}) : super(key: key);
@@ -9,100 +9,20 @@ class MobileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('SystemWheater'),
-        ),
-        drawer: const DrawerList(),
-        body: Column(
-          children: [
-            Expanded(
-              child: Container(
-                color: const Color(0xffCEEBF3),
-                child: const Center(
-                  child: Text(
-                    'SystemWheater',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+      appBar: AppBar(
+          title: const Text('WaterSystem'),
+          backgroundColor: const Color(0xff4861FF),
+          leading: Container(
+            margin: const EdgeInsets.all(10),
+            child: const Image(
+              image: AssetImage('assets/logo.png'),
+              color: Colors.white,
+              width: 1,
+              height: 1,
             ),
-            Expanded(
-              child: Container(
-                color: Colors.deepPurple,
-              ),
-            ),
-          ],
-        ));
-  }
-}
-
-class DrawerList extends StatelessWidget {
-  const DrawerList({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Drawer(
-        backgroundColor: const Color(0xffCEEBF3),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            children: [
-              const Expanded(
-                child: Center(
-                  child: Text(
-                    'SW',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              const Divider(
-                thickness: 2,
-              ),
-              Expanded(
-                flex: 3,
-                child: ListView.builder(
-                  itemCount: draweList.length,
-                  itemExtent: 100,
-                  itemBuilder: ((context, index) {
-                    final item = draweList[index];
-                    return GestureDetector(
-                      onTap: () {
-                        if (item.title == 'Login') {
-                          Navigator.pushNamed(context, Routes.login);
-                        }
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        height: 20,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: Colors.amber,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(item.icon),
-                            Text(item.title),
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              ),
-              const Divider(
-                thickness: 2,
-              ),
-              Expanded(
-                child: Container(),
-              ),
-            ],
-          ),
-        ),
-      ),
+          )),
+      endDrawer: const DrawerList(),
+      body: const BodyResponsive(),
     );
   }
 }

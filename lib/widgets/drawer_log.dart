@@ -5,18 +5,25 @@ import '../constants/constants.dart';
 import '../routes/routes.dart';
 
 class DraweLog extends StatefulWidget {
+  final User? user;
   const DraweLog({
     super.key,
     required this.user,
   });
-
-  final User? user;
 
   @override
   State<DraweLog> createState() => _DraweLogState();
 }
 
 class _DraweLogState extends State<DraweLog> {
+  final user = FirebaseAuth.instance.currentUser;
+  @override
+  void dispose() {
+    user!.email;
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -33,13 +40,17 @@ class _DraweLogState extends State<DraweLog> {
             flex: 3,
             child: ListView.builder(
               itemCount: draweListLog.length,
-              itemExtent: 200,
+              itemExtent: 150,
               itemBuilder: (context, index) {
                 final item = draweListLog[index];
                 return GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, Routes.registro,
-                        arguments: item.title);
+                    if (item.title == 'Productos') {
+                      Navigator.pushNamed(context, Routes.productosscreen);
+                    } else {
+                      Navigator.pushNamed(context, Routes.registro,
+                          arguments: item.title);
+                    }
                   },
                   child: Container(
                     margin:
@@ -65,7 +76,6 @@ class _DraweLogState extends State<DraweLog> {
           Expanded(
             child: Column(
               children: [
-                Text(' ${widget.user?.email}'),
                 MaterialButton(
                   onPressed: () {
                     Navigator.pushNamedAndRemoveUntil(

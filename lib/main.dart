@@ -21,6 +21,10 @@ class MyApp extends StatelessWidget {
       title: 'SystemWheather',
       initialRoute: Routes.home,
       routes: appRoutes,
+      theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+        color: Color(0xff4861FF),
+      )),
     );
   }
 }

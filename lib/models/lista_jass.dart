@@ -21,11 +21,11 @@ Future<List<ListJass>> getObjectList() async {
       await FirebaseFirestore.instance.collection('jass').get();
   List<QueryDocumentSnapshot> documentList = querySnapshot.docs;
 
-  documentList.forEach((document) {
+  for (var document in documentList) {
     ListJass object = ListJass(
         provincia: document.get('provincia'), uid: document.get('uid'));
     objectList.add(object);
-  });
+  }
 
   return objectList;
 }
