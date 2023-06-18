@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:sistem_weatherv2/widgets/drawer_list.dart';
-
 import '../../routes/routes.dart';
 import '../../widgets/body_responsive.dart';
 
@@ -13,7 +11,6 @@ class WebScreen extends StatelessWidget {
     final wid = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xff4861FF),
         title: const Text('WaterSystem'),
         leading: wid < 1000
             ? Container(
@@ -105,7 +102,7 @@ class WebScreen extends StatelessWidget {
             ))
         ],
       ),
-      endDrawer: wid < 1000 ? const DrawerList() : null,
+      endDrawer: wid < 1000 ? const Drawer() : null,
       body: const BodyResponsive(),
     );
   }

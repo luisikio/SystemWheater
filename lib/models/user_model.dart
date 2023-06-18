@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart';
+
 class UserModel {
   String? uid;
   String? name;
@@ -56,4 +59,26 @@ class UserModel {
         jass: json['jass'],
         //jassModel: json['jassModel'],
       );
+}
+
+Future<List<UserModel>> getObjectListUsers() async {
+  List<UserModel> objectList = [];
+
+  QuerySnapshot querySnapshot =
+      await FirebaseFirestore.instance.collection('user').get();
+  List<QueryDocumentSnapshot> documentList = querySnapshot.docs;
+
+  for (var document in documentList) {
+    UserModel object = UserModel(
+      name: document.get('name'),
+      apellido: document.get('apellido'),
+      telefono: document.get('telefono'),
+      email: document.get('email'),
+      rool: document.get('rool'),
+      jass: document.get('jass'),
+    );
+    objectList.add(object);
+  }
+
+  return objectList;
 }

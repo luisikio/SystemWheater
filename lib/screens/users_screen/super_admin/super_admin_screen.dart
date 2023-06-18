@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
-import '../../../widgets/drawer_log.dart';
+import 'package:sistem_weatherv2/models/user_model.dart';
+
+import '../../../models/nombreJass_model.dart';
+
+import '../../../widgets/cardView.dart';
 import '../../home_screen.dart';
 
 // ignore: must_be_immutable
@@ -23,23 +28,28 @@ class _UserOperarioScreenState extends State<AdminScreen> {
 
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('user').snapshots();
-  final user = FirebaseAuth.instance.currentUser;
-
   final Stream<QuerySnapshot> _usersStream2 =
-      FirebaseFirestore.instance.collection('jass').snapshots();
+      FirebaseFirestore.instance.collection('producto').snapshots();
+  final Stream<QuerySnapshot> _usersStream3 =
+      FirebaseFirestore.instance.collection('JasRegistration').snapshots();
+
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    user = FirebaseAuth.instance.currentUser;
+  }
 
   @override
   void dispose() {
-    user!.email;
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print("soy id que se envia de register ${widget.id}");
-    // print('soy super ${user!.email}');
     return Scaffold(
+      backgroundColor: const Color(0xff1F2432),
       appBar: AppBar(
         title: const Text('Admin'),
         actions: [
@@ -51,115 +61,199 @@ class _UserOperarioScreenState extends State<AdminScreen> {
           ),
         ],
       ),
-      drawer: DraweLog(user: user),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: _usersStream,
-                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return ListView(
-                      children:
-                          snapshot.data!.docs.map((DocumentSnapshot document) {
-                        Map<String, dynamic> data =
-                            document.data()! as Map<String, dynamic>;
-                        return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: ListTile(
-                            title: Text(
-                                data['name'] + '  ' + data['apellido'] + '  '),
-                            subtitle: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(data['email']),
-                                Text(data['rool']),
-                                Text(data['jass']!),
-                                GestureDetector(
-                                  onTap: () async {
-                                    id = data['uid'];
-                                    FirebaseFirestore.instance
-                                        .collection('user')
-                                        .doc(id)
-                                        .delete();
-                                  },
-                                  child: const Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    id = data['uid'];
-                                  },
-                                  child: const Icon(
-                                    Icons.disabled_by_default,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  },
-                ),
+            cardView(
+              usersStream3: _usersStream3,
+              usersStream: _usersStream,
+              usersStream2: _usersStream2,
+              rool: 'admin',
+            ),
+            Container(
+              padding: const EdgeInsets.all(15),
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 15)
+                  .copyWith(bottom: 10),
+              height: 300,
+              decoration: BoxDecoration(
+                color: const Color(0xff272D3D),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Usuarios creado Recientes: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: const [
+                        Text('Nombres'),
+                        Text('Rol'),
+                        Text('Jass'),
+                      ],
+                    ),
+                  ),
+                  itemsUsers(),
+                ],
               ),
             ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: _usersStream2,
-                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return ListView(
-                      children:
-                          snapshot.data!.docs.map((DocumentSnapshot document) {
-                        Map<String, dynamic> data =
-                            document.data()! as Map<String, dynamic>;
-                        return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: ListTile(
-                            title: Text(data['provincia']),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  },
-                ),
+            Container(
+              padding: const EdgeInsets.all(15),
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 15)
+                  .copyWith(bottom: 10),
+              height: 300,
+              decoration: BoxDecoration(
+                color: const Color(0xff272D3D),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Jas registradas Recientemente: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: const [
+                        Text('Departamento'),
+                        Text('Caserio'),
+                        Text('Nombre'),
+                      ],
+                    ),
+                  ),
+                  itemsJass(),
+                ],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  StreamBuilder<QuerySnapshot<Object?>> itemsUsers() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _usersStream,
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return Expanded(
+          child: ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data =
+                  document.data()! as Map<String, dynamic>;
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  color: const Color(0xff1F2432),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: ListTile(
+                  title: Container(
+                    alignment: Alignment.center,
+                    width: 40,
+                    height: 20,
+                    child: Text(
+                      data['rool'].toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  leading: Container(
+                    alignment: Alignment.centerLeft,
+                    height: double.infinity,
+                    width: 110,
+                    child: Text('${data['name'] + ' ' + data['apellido']}'),
+                  ),
+                  trailing: Container(
+                    alignment: Alignment.centerLeft,
+                    width: 90,
+                    height: double.infinity,
+                    child: Text('${data['jass']}'),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+
+  StreamBuilder<QuerySnapshot<Object?>> itemsJass() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _usersStream3,
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return Expanded(
+          child: ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data =
+                  document.data()! as Map<String, dynamic>;
+              return GestureDetector(
+                onTap: () {
+                  String jasAsig = data['nombre'];
+
+                  showDialogWithList(jasAsig);
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff1F2432),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: ListTile(
+                    title: Container(
+                      alignment: Alignment.center,
+                      width: 40,
+                      height: 20,
+                      child: Text(
+                        data['caserio'].toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    leading: Container(
+                      alignment: Alignment.centerLeft,
+                      height: double.infinity,
+                      width: 110,
+                      child: Text('${data['departamento']}'),
+                    ),
+                    trailing: Container(
+                      alignment: Alignment.centerLeft,
+                      width: 90,
+                      height: double.infinity,
+                      child: Text('${data['nombre']}'),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      },
     );
   }
 
@@ -171,6 +265,301 @@ class _UserOperarioScreenState extends State<AdminScreen> {
       MaterialPageRoute(
         builder: (_) => const HomeScreen(),
       ),
+    );
+  }
+
+  Future<void> showDialogWithList(String jass) async {
+    List<NameJassModel> objectList = await getObjectList();
+    final currentContext = context;
+
+    // ignore: use_build_context_synchronously
+    await showDialog(
+      context: currentContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xff1F2432),
+          title: const Text(
+            'Datos de la Jas',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: objectList.map((obj) {
+              if (jass == obj.nombre.toString()) {
+                return Column(
+                  children: [
+                    Text(
+                      obj.nombre!.toLowerCase().toUpperCase(),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Departamento'),
+                        Text(
+                          obj.departamento!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Provincia'),
+                        Text(
+                          obj.provincia!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Distrito'),
+                        Text(
+                          obj.distrito!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Caserio'),
+                        Text(
+                          obj.caserio!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Nombre'),
+                        Text(
+                          obj.nombre!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Total de Familias'),
+                        Text(
+                          obj.totalFam!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Familias sin Convertura'),
+                        Text(
+                          obj.famSinCovertura!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Familias con Convertura'),
+                        Text(
+                          obj.famCovertura!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Reconocimiento de la Muni',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          obj.reconocimiento!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                  ],
+                );
+              } else {
+                return const SizedBox();
+              }
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Cerrar',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> showDialogWithListUser(String usuario) async {
+    List<UserModel> objectList = await getObjectListUsers();
+    final currentContext = context;
+
+    // ignore: use_build_context_synchronously
+    await showDialog(
+      context: currentContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xff1F2432),
+          title: const Text(
+            'Datos de Usuario',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: objectList.map((obj) {
+              if (usuario == obj.email.toString()) {
+                return Column(
+                  children: [
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Nombres'),
+                        Text(
+                          obj.name!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Apellidos'),
+                        Text(
+                          obj.apellido!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Email'),
+                        Text(
+                          obj.email!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Jas Asignada'),
+                        Text(
+                          obj.jass!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Rol'),
+                        Text(
+                          obj.rool!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Teléfono'),
+                        Text(
+                          obj.telefono!.toLowerCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                  ],
+                );
+              } else {
+                return const SizedBox();
+              }
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Cerrar',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

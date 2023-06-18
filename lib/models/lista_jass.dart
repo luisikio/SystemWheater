@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class ListJass {
   final String provincia;
   final String uid;
@@ -14,18 +12,36 @@ class ListJass {
   }
 }
 
-Future<List<ListJass>> getObjectList() async {
-  List<ListJass> objectList = [];
+// Future<List<ListJass>> getObjectList() async {
+//   List<ListJass> objectList = [];
 
-  QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection('jass').get();
-  List<QueryDocumentSnapshot> documentList = querySnapshot.docs;
+//   QuerySnapshot querySnapshot =
+//       await FirebaseFirestore.instance.collection('jass').get();
+//   List<QueryDocumentSnapshot> documentList = querySnapshot.docs;
 
-  for (var document in documentList) {
-    ListJass object = ListJass(
-        provincia: document.get('provincia'), uid: document.get('uid'));
-    objectList.add(object);
-  }
+//   for (var document in documentList) {
+//     ListJass object = ListJass(
+//         provincia: document.get('provincia'), uid: document.get('uid'));
+//     objectList.add(object);
+//   }
 
-  return objectList;
-}
+//   return objectList;
+// }
+
+// Future<List<ListJass>> getObjectList() async {
+//   List<ListJass> objectList = [];
+
+//   QuerySnapshot querySnapshot =
+//       await FirebaseFirestore.instance.collection('JasRegistration').get();
+//   List<QueryDocumentSnapshot> documentList = querySnapshot.docs;
+
+//   for (var document in documentList) {
+//     ListJass object =
+//         ListJass(provincia: document.get('nombre'), uid: document.get('uid'));
+//     objectList.add(object);
+
+//     print(object.provincia);
+//   }
+
+//   return objectList;
+// }

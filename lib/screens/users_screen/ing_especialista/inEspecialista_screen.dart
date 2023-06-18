@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:sistem_weatherv2/widgets/cardView.dart';
 
 import '../../../models/user_model.dart';
+import '../../../routes/routes.dart';
 import '../../home_screen.dart';
 
 // ignore: must_be_immutable
@@ -18,6 +21,11 @@ class _UserOperarioScreenState extends State<IngEspecialistaScreen> {
   String? id;
   String? rooll;
   String? emaill;
+
+  final Stream<QuerySnapshot> _usersStreamMonitoreo =
+      FirebaseFirestore.instance.collection('monitoreo').snapshots();
+  final Stream<QuerySnapshot> _usersStreamCloracion =
+      FirebaseFirestore.instance.collection('cloracion').snapshots();
 
   UserModel loggIdUser = UserModel();
 
@@ -42,22 +50,149 @@ class _UserOperarioScreenState extends State<IngEspecialistaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final wid = MediaQuery.of(context).size.width;
+    print(wid);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ing especialista'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              logout(context);
-            },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
-      ),
-      body: const Center(
-        child: Text('especialista'),
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('ing especialista'),
+          actions: [
+            IconButton(
+              onPressed: () {
+                logout(context);
+              },
+              icon: const Icon(Icons.logout),
+            ),
+          ],
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Divider(),
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.cloracionDetails);
+                },
+                child: Container(
+                  margin: wid > 900 && wid < 1300
+                      ? const EdgeInsets.symmetric(horizontal: 300)
+                      : wid > 1300 && wid < 1600
+                          ? const EdgeInsets.symmetric(horizontal: 300)
+                          : wid > 1600
+                              ? const EdgeInsets.symmetric(horizontal: 300)
+                              : const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff272D3D),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Cloración',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.white),
+                      ),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: _usersStreamCloracion,
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+
+                          int totaljass = snapshot.data!.docs.length;
+
+                          return Column(
+                            children: [
+                              Text(
+                                'Total de Cloración: $totaljass',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      Flexible(
+                        child: LottieBuilder.asset(
+                          'assets/cloracion.json',
+                          fit: BoxFit.fill,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            ///////
+            const Divider(),
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.monitoreoDetails);
+                },
+                child: Container(
+                  margin: wid > 900 && wid < 1300
+                      ? const EdgeInsets.symmetric(horizontal: 300)
+                      : wid > 1300 && wid < 1600
+                          ? const EdgeInsets.symmetric(horizontal: 300)
+                          : wid > 1600
+                              ? const EdgeInsets.symmetric(horizontal: 300)
+                              : const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff272D3D),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Monitoreo',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.white),
+                      ),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: _usersStreamMonitoreo,
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+
+                          int totaljass = snapshot.data!.docs.length;
+
+                          return Column(
+                            children: [
+                              Text(
+                                'Total de Monitoreos: $totaljass',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      Flexible(
+                        child: LottieBuilder.asset(
+                          'assets/monitoreo.json',
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const Divider(),
+          ],
+        ));
   }
 
   Future<void> logout(BuildContext context) async {

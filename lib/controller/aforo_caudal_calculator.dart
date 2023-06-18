@@ -77,9 +77,7 @@ class CalculatoreController extends GetxController {
 
     result > 0.1 ? caudalResult = volume / result : caudalResult = 0;
 
-    //resultado.value = RxDouble(caudalResult).toString();
-
-    // print(resultado.value);
+    caudalResult = double.parse(result.toStringAsFixed(2));
 
     return caudalResult;
   }
@@ -97,9 +95,7 @@ class CalculatoreController extends GetxController {
       volumTanque.value =
           number.substring(0, number.length - 2).replaceAll(' ', '');
       return volumTanque.value;
-    } else {
-      print('error');
-    }
+    } else {}
   }
 
   cloroResid(String number) {
@@ -119,14 +115,15 @@ class CalculatoreController extends GetxController {
     double t2;
     double t3;
     double gramos;
+    double result;
 
     tiempoRecarga.value != '' ? t1 = double.parse(tiempoRecarga.value) : t1 = 0;
     cloroResidual.value != '' ? t2 = double.parse(cloroResidual.value) : t2 = 0;
     coloroComercial.value != ''
         ? t3 = double.parse(coloroComercial.value)
         : t3 = 0;
-    gramos = (caudal() * (t1 * 60 * 1440) * t2) / t3 * 10;
-
+    result = (caudal() * (t1 * 1440) * t2) / t3 / 100 * 10;
+    gramos = double.parse(result.toStringAsFixed(2));
     return gramos;
   }
 
@@ -134,11 +131,13 @@ class CalculatoreController extends GetxController {
     double t1;
     double t2;
     double qg;
+    double result;
 
     volumTanque.value != '' ? t1 = double.parse(volumTanque.value) : t1 = 0;
     tiempoRecarga.value != '' ? t2 = double.parse(tiempoRecarga.value) : t2 = 0;
 
-    qg = t1 * 1000 / t2 * 1440;
+    result = (t1 * 1000) / (t2 * 1440);
+    qg = double.parse(result.toStringAsFixed(2));
 
     return qg;
   }
