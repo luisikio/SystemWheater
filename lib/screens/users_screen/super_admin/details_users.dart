@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../../models/user_model.dart';
 import '../../../routes/routes.dart';
@@ -22,23 +21,23 @@ class _UserDetilsScreenState extends State<UserDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 18, 21, 29),
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        // padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         margin: wid > 900 && wid < 1300
             ? const EdgeInsets.symmetric(horizontal: 200)
             : wid > 1300 && wid < 1600
                 ? const EdgeInsets.symmetric(horizontal: 220)
                 : wid > 1600
                     ? const EdgeInsets.symmetric(horizontal: 500)
-                    : const EdgeInsets.symmetric(horizontal: 15)
+                    : const EdgeInsets.symmetric(horizontal: 0)
                         .copyWith(bottom: 10),
         child: CustomScrollView(
           slivers: [
-            SliverAppBarUser(),
-            SliverListRegister(),
+            const SliverAppBarUser(),
+            const SliverListRegister(),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) => SizedBox(
@@ -75,7 +74,7 @@ class _UserDetilsScreenState extends State<UserDetailsScreen> {
                                   });
                                 },
                                 decoration: const InputDecoration(
-                                  hintText: 'Buscar',
+                                  hintText: 'Buscar: nombres',
                                 ),
                               ),
                             ),
@@ -85,19 +84,23 @@ class _UserDetilsScreenState extends State<UserDetailsScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 10),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: const [
-                                  Text('Nombres'),
-                                  Text('Rol'),
-                                  Text('Jass'),
+                                children: [
+                                  Expanded(child: Text('Nombres')),
+                                  Expanded(
+                                      child: Text('Rol',
+                                          textAlign: TextAlign.center)),
+                                  Expanded(
+                                      child: Text(
+                                    'Jass',
+                                    textAlign: TextAlign.end,
+                                  )),
                                 ],
                               ),
                             ),
-                            ItemUser(),
+                            itemUser(),
                           ],
                         ),
                       ),
@@ -113,7 +116,7 @@ class _UserDetilsScreenState extends State<UserDetailsScreen> {
     );
   }
 
-  StreamBuilder<QuerySnapshot<Object?>> ItemUser() {
+  StreamBuilder<QuerySnapshot<Object?>> itemUser() {
     return StreamBuilder<QuerySnapshot>(
       stream: _usersStream,
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -142,63 +145,59 @@ class _UserDetilsScreenState extends State<UserDetailsScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: ListTile(
-                      title: Container(
-                        margin: const EdgeInsets.only(left: 10),
-                        alignment: Alignment.center,
-                        child: Text(
-                          data['rool'].toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      leading: Container(
-                        alignment: Alignment.centerLeft,
-                        height: double.infinity,
-                        width: 90,
-                        child: Text('${data['name'] + ' ' + data['apellido']}'),
-                      ),
-                      trailing: SizedBox(
-                        width: 100,
-                        height: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              flex: 2,
+                      title: Row(
+                        children: [
+                          Expanded(
                               child: Text(
-                                '${data['jass']}',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                                  '${data['name'] + ' ' + data['apellido']}')),
+                          Expanded(
+                            child: Text(
+                              data['rool'].toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
                               ),
+                              textAlign: TextAlign.center,
                             ),
-                            Expanded(
-                              child: IconButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    Routes.edituserprofile,
-                                    arguments: {
-                                      'name': data['name'].toString(),
-                                      'apellido': data['apellido'].toString(),
-                                      'email': data['email'].toString(),
-                                      'jass': data['jass'].toString(),
-                                      'rool': data['rool'].toString(),
-                                      'telefono': data['telefono'].toString(),
-                                      'uid': data['uid'].toString(),
-                                      'userDetails': _userDetails,
-                                    },
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  size: 28,
-                                  color: Colors.white,
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${data['jass']}',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    textAlign: TextAlign.right,
+                                  ),
                                 ),
-                              ),
+                                IconButton(
+                                  alignment: Alignment.centerRight,
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.edituserprofile,
+                                      arguments: {
+                                        'name': data['name'].toString(),
+                                        'apellido': data['apellido'].toString(),
+                                        'email': data['email'].toString(),
+                                        'jass': data['jass'].toString(),
+                                        'rool': data['rool'].toString(),
+                                        'telefono': data['telefono'].toString(),
+                                        'uid': data['uid'].toString(),
+                                        'userDetails': _userDetails,
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -220,56 +219,59 @@ class _UserDetilsScreenState extends State<UserDetailsScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: ListTile(
-                      title: Container(
-                        alignment: Alignment.center,
-                        width: 40,
-                        height: 20,
-                        child: Text(
-                          data['rool'].toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      leading: Container(
-                        alignment: Alignment.centerLeft,
-                        height: double.infinity,
-                        width: 110,
-                        child: Text('${data['name'] + ' ' + data['apellido']}'),
-                      ),
-                      trailing: Container(
-                        alignment: Alignment.centerLeft,
-                        width: 130,
-                        height: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text('${data['jass']}'),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  Routes.edituserprofile,
-                                  arguments: {
-                                    'name': data['name'].toString(),
-                                    'apellido': data['apellido'].toString(),
-                                    'email': data['email'].toString(),
-                                    'jass': data['jass'].toString(),
-                                    'rool': data['rool'].toString(),
-                                    'telefono': data['telefono'].toString(),
-                                    'uid': data['uid'].toString(),
-                                    'userDetails': _userDetails,
-                                  },
-                                );
-                              },
-                              icon: const Icon(
-                                Icons.edit,
-                                size: 28,
+                      title: Row(
+                        children: [
+                          Expanded(
+                              child: Text(
+                                  '${data['name'] + ' ' + data['apellido']}')),
+                          Expanded(
+                            child: Text(
+                              data['rool'].toString(),
+                              style: const TextStyle(
                                 color: Colors.white,
                               ),
+                              textAlign: TextAlign.center,
                             ),
-                          ],
-                        ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${data['jass']}',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                                IconButton(
+                                  alignment: Alignment.centerRight,
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.edituserprofile,
+                                      arguments: {
+                                        'name': data['name'].toString(),
+                                        'apellido': data['apellido'].toString(),
+                                        'email': data['email'].toString(),
+                                        'jass': data['jass'].toString(),
+                                        'rool': data['rool'].toString(),
+                                        'telefono': data['telefono'].toString(),
+                                        'uid': data['uid'].toString(),
+                                        'userDetails': _userDetails,
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

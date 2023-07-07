@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:lottie/lottie.dart';
@@ -18,54 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _obscureText = true;
 
-  singIn() async {
-    try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      )
-          .then(
-        (_) {
-          if (mounted) {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              Routes.homeuserscreen,
-              (route) => false,
-            );
-          }
-          saveAdminData(_emailController.text, _passwordController.text);
-        },
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('No existe usuario con ese correo electrónico.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Contraseña incorrecta.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else if (e.code == 'user-disabled') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('El usuario está deshabilitado.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
   @override
   void initState() {
-    initPreferences();
     super.initState();
   }
 
@@ -84,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
       backgroundColor: const Color(0xff1F2432),
       appBar: AppBar(),
@@ -211,9 +166,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          await singIn();
+                          await iniciarSesion(context);
 
-                          FocusScope.of(context).unfocus();
+                          //throw Exception();
                         },
                         child: Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -247,6 +202,78 @@ class _LoginScreenState extends State<LoginScreen> {
               ? formularioResponsive(context, wid)
               : formularioResponsive(context, wid),
     );
+  }
+
+  iniciarSesion(BuildContext context) {
+    return () async {
+      try {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        )
+            .then(
+          (_) {
+            if (mounted) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                Routes.homeuserscreen,
+                (route) => false,
+              );
+            }
+            saveAdminData(_emailController.text, _passwordController.text);
+          },
+        );
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          // FirebaseCrashlytics.instance
+          //     .setCustomKey('user', 'no registrado en la base de datos');
+          // await Future.delayed(const Duration(seconds: 2));
+          // FirebaseCrashlytics.instance.recordError(e, stackTrace);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('No existe usuario con ese correo electrónico.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (e.code == 'wrong-password') {
+          // FirebaseCrashlytics.instance
+          //     .setCustomKey('userPass', 'contraseña incorrecta');
+          // await Future.delayed(const Duration(seconds: 2));
+          // await FirebaseCrashlytics.instance.recordError(
+          //   e,
+          //   stackTrace,
+          //   reason: 'a non-fatal error',
+          //   information: [
+          //     'further diagnostic information about the error',
+          //     'version 2.0'
+          //   ],
+          // );
+          // await FirebaseCrashlytics.instance
+          //     .recordFlutterError(e as FlutterErrorDetails);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Contraseña incorrecta.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (e.code == 'user-disabled') {
+          // FirebaseCrashlytics.instance
+          //     .setCustomKey('user', 'usuario deshabilitado');
+          // await Future.delayed(const Duration(seconds: 2));
+          // FirebaseCrashlytics.instance.recordError(e, stackTrace);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('El usuario está deshabilitado.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }();
   }
 
   Form formularioResponsive(BuildContext context, double pantalla) {
@@ -389,7 +416,52 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      await singIn();
+                      await () async {
+                        try {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
+                          )
+                              .then(
+                            (_) {
+                              if (mounted) {
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  Routes.homeuserscreen,
+                                  (route) => false,
+                                );
+                              }
+                              saveAdminData(_emailController.text,
+                                  _passwordController.text);
+                            },
+                          );
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'user-not-found') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'No existe usuario con ese correo electrónico.'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          } else if (e.code == 'wrong-password') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Contraseña incorrecta.'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          } else if (e.code == 'user-disabled') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('El usuario está deshabilitado.'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        }
+                      }();
                       // ignore: use_build_context_synchronously
                       FocusScope.of(context).unfocus();
                     },
@@ -423,10 +495,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
-  }
-
-  void initPreferences() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
   }
 
   void saveAdminData(String email, String password) async {

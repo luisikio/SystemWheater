@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
+
 import 'package:sistem_weatherv2/controller/productos_controller.dart';
 
 class EnviarProductosScreen extends StatefulWidget {
@@ -25,7 +24,7 @@ class _EnviarProductosScreenState extends State<EnviarProductosScreen> {
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     final Map<String, dynamic>? arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
 

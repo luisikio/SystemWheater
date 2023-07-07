@@ -89,11 +89,11 @@ class _UserOperarioScreenState extends State<AdminScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: const [
+                      children: [
                         Text('Nombres'),
                         Text('Rol'),
                         Text('Jass'),
@@ -123,11 +123,11 @@ class _UserOperarioScreenState extends State<AdminScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: const [
+                      children: [
                         Text('Departamento'),
                         Text('Caserio'),
                         Text('Nombre'),
@@ -261,6 +261,7 @@ class _UserOperarioScreenState extends State<AdminScreen> {
     const CircularProgressIndicator();
     await FirebaseAuth.instance.signOut();
 
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (_) => const HomeScreen(),

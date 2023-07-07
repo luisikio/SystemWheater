@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, prefer_is_not_empty
+
 import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -11,6 +13,7 @@ import 'package:sistem_weatherv2/models/monitoreo_model.dart';
 
 import 'package:sistem_weatherv2/models/user_model.dart';
 import 'package:sistem_weatherv2/routes/routes.dart';
+import 'package:sistem_weatherv2/screens/users_screen/user_profile/edit_profile.dart';
 
 import '../../../controller/aforo_caudal_calculator.dart';
 import '../../../models/nombreJass_model.dart';
@@ -89,7 +92,9 @@ class _UserOperarioScreenState extends State<UserOperarioScreen> {
   final _primeraVivienda = TextEditingController();
   final _viviendaIntermedia = TextEditingController();
   final _viviendaFinal = TextEditingController();
+
   var name;
+
   var apellidos;
   var email;
   var telefono;
@@ -100,10 +105,16 @@ class _UserOperarioScreenState extends State<UserOperarioScreen> {
   var nombreJass2;
 
   int valor = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      indexD = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
       backgroundColor: const Color(0xff1F2432),
       appBar: AppBar(
@@ -119,14 +130,6 @@ class _UserOperarioScreenState extends State<UserOperarioScreen> {
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               bottomLeft: Radius.circular(20),
-            ),
-            gradient: LinearGradient(
-              colors: [
-                Color(0xff4861FF),
-                Colors.blue,
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
             ),
           ),
           child: Column(
@@ -205,6 +208,33 @@ class _UserOperarioScreenState extends State<UserOperarioScreen> {
           screen3(wid),
         ],
       ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       label: 'Home',
+      //       backgroundColor: Colors.red,
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.business),
+      //       label: 'Business',
+      //       backgroundColor: Colors.green,
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.school),
+      //       label: 'School',
+      //       backgroundColor: Colors.purple,
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.settings),
+      //       label: 'Settings',
+      //       backgroundColor: Colors.pink,
+      //     ),
+      //   ],
+      //   currentIndex: indexD,
+      //   selectedItemColor: Colors.amber[800],
+      //   onTap: _onItemTapped,
+      // ),
     );
   }
 
@@ -390,12 +420,12 @@ class _UserOperarioScreenState extends State<UserOperarioScreen> {
                           List<NameJassModel> objectList =
                               await getObjectList();
 
-                          objectList.forEach((e) {
+                          for (var e in objectList) {
                             if (jassN == e.nombre.toString()) {
                               nombreJass2 = e.nombre.toString();
                             }
-                          });
-                          print(nombreJass2);
+                          }
+
                           const CircularProgressIndicator();
                           if (!_autoridadAcompana.text.isEmpty &&
                               !_reservorio.text.isEmpty &&
@@ -416,6 +446,7 @@ class _UserOperarioScreenState extends State<UserOperarioScreen> {
                             _primeraVivienda.clear();
                             _viviendaIntermedia.clear();
                             _viviendaFinal.clear();
+                            // ignore: use_build_context_synchronously
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Monitoreo Registrado.'),
@@ -423,6 +454,7 @@ class _UserOperarioScreenState extends State<UserOperarioScreen> {
                               ),
                             );
                           } else {
+                            // ignore: use_build_context_synchronously
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(
@@ -965,9 +997,9 @@ class _UserOperarioScreenState extends State<UserOperarioScreen> {
                 color: Colors.deepPurpleAccent,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: const [
+                children: [
                   Text(
                     'En un balde de 20L diluye el agua el hipoclorito de calcio',
                     style: TextStyle(
@@ -994,11 +1026,11 @@ class _UserOperarioScreenState extends State<UserOperarioScreen> {
 
                 List<NameJassModel> objectList = await getObjectList();
 
-                objectList.forEach((e) {
+                for (var e in objectList) {
                   if (jassN == e.nombre.toString()) {
                     nombreJass = e.nombre.toString();
                   }
-                });
+                }
 
                 if (calculatorCtr.caudal() != 0.0) {
                   cloracionRegistration(
@@ -1012,6 +1044,7 @@ class _UserOperarioScreenState extends State<UserOperarioScreen> {
                     nombreOpe,
                     nombreJass,
                   );
+                  // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Cloracion registrada.'),
@@ -1019,6 +1052,7 @@ class _UserOperarioScreenState extends State<UserOperarioScreen> {
                     ),
                   );
                 } else {
+                  // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('El caudal no puede ser 0.0 L/S'),

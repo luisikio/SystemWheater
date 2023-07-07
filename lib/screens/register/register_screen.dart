@@ -7,11 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sistem_weatherv2/screens/home_screen.dart';
-import 'package:sistem_weatherv2/screens/users_screen/home_screen_user.dart';
-
-import 'package:sistem_weatherv2/screens/users_screen/super_admin/super_admin_screen.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../models/nombreJass_model.dart';
 import '../../models/password_alea.dart';
@@ -103,7 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 18, 21, 29),
       appBar: AppBar(
@@ -174,7 +169,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         validator: (value) {
-                          print(value);
                           return (value != null && value.length >= 2)
                               ? null
                               : 'Ingrese apellidos para registrar';
@@ -352,7 +346,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(width: 20),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Color(0xff4861FF),
+                            backgroundColor: const Color(0xff4861FF),
                           ),
                           onPressed: () {
                             showDialogWithList();

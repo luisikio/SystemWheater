@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sistem_weatherv2/models/caserio_model.dart';
-import 'package:sistem_weatherv2/models/departamento_Model.dart';
+import 'package:sistem_weatherv2/models/departamento_model.dart';
 import 'package:sistem_weatherv2/models/distrito_model.dart';
 import 'package:sistem_weatherv2/models/nombreJass_model.dart';
 
@@ -38,26 +38,27 @@ class _RegisterScreenState extends State<JassRegisterScreeen> {
   final _famConCoverturaController = TextEditingController();
   final _reconocidaController = TextEditingController();
 
+  // ignore: non_constant_identifier_names
   final String _Details = 'jassDetails';
 
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 18, 21, 29),
       appBar: AppBar(
         title: const Text("Registro Jas"),
       ),
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        //padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         margin: wid > 900 && wid < 1300
             ? const EdgeInsets.symmetric(horizontal: 200)
             : wid > 1300 && wid < 1600
                 ? const EdgeInsets.symmetric(horizontal: 220)
                 : wid > 1600
-                    ? const EdgeInsets.symmetric(horizontal: 500)
-                    : const EdgeInsets.symmetric(horizontal: 15)
+                    ? const EdgeInsets.symmetric(horizontal: 600)
+                    : const EdgeInsets.symmetric(horizontal: 0)
                         .copyWith(bottom: 10),
         child: SingleChildScrollView(
           child: Center(

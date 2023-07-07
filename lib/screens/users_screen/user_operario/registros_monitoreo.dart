@@ -19,7 +19,7 @@ class _RegistroMonitoreoScreenState extends State<RegistroMonitoreoScreen> {
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 18, 21, 29),
         appBar: AppBar(

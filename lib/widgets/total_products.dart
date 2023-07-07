@@ -13,7 +13,7 @@ class TotalProducts extends StatefulWidget {
 }
 
 class _TotalProductsState extends State<TotalProducts> {
-  final CalcProducts = Get.put(ProductosController());
+  final calcProducts = Get.put(ProductosController());
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('totalProductos').snapshots();
   @override
@@ -68,7 +68,7 @@ class _TotalProductsState extends State<TotalProducts> {
                         ),
                       ],
                     ),
-                    ItemUser(),
+                    itemUser(),
                   ],
                 ),
               ),
@@ -80,7 +80,7 @@ class _TotalProductsState extends State<TotalProducts> {
     );
   }
 
-  StreamBuilder<QuerySnapshot<Object?>> ItemUser() {
+  StreamBuilder<QuerySnapshot<Object?>> itemUser() {
     return StreamBuilder<QuerySnapshot>(
       stream: _usersStream,
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -97,18 +97,18 @@ class _TotalProductsState extends State<TotalProducts> {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
 
-                // data['cloro'] = CalcProducts.cloro;
+                // data['cloro'] = calcProducts.cloro;
 
-                CalcProducts.addCloro(data['cloro'].toString());
-                CalcProducts.addReactivo(data['reactivo']);
-                CalcProducts.addEpp(data['epp']);
-                CalcProducts.balde5(data['balde']);
-                CalcProducts.balde20(data['balde20']);
-                CalcProducts.addMangeras(data['mangueras']);
-                CalcProducts.carretilla(data['carretilla']);
-                CalcProducts.addEquiCompra(data['equiComp']);
+                calcProducts.addCloro(data['cloro'].toString());
+                calcProducts.addReactivo(data['reactivo']);
+                calcProducts.addEpp(data['epp']);
+                calcProducts.balde5(data['balde']);
+                calcProducts.balde20(data['balde20']);
+                calcProducts.addMangeras(data['mangueras']);
+                calcProducts.carretilla(data['carretilla']);
+                calcProducts.addEquiCompra(data['equiComp']);
 
-                // print(CalcProducts.cloro);
+                // print(calcProducts.cloro);
 
                 return Container(
                   decoration: BoxDecoration(

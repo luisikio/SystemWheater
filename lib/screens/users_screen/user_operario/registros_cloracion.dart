@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import '../../../controller/productos_controller.dart';
 
 class RegistroCloracionScreen extends StatefulWidget {
   const RegistroCloracionScreen({Key? key}) : super(key: key);
@@ -16,10 +20,11 @@ class _RegistroCloracionScreenState extends State<RegistroCloracionScreen> {
 
   String? uidFinal;
   final user = FirebaseAuth.instance.currentUser;
+  final calcProducts = Get.put(ProductosController());
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 18, 21, 29),
         appBar: AppBar(
@@ -77,6 +82,8 @@ class _RegistroCloracionScreenState extends State<RegistroCloracionScreen> {
 
                               Timestamp date = data['fecha'];
                               DateTime datatime = date.toDate();
+
+                              calcProducts.addTotalCloracion(pgr);
 
                               return Container(
                                 margin:

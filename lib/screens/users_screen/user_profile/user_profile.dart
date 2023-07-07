@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:sistem_weatherv2/routes/routes.dart';
-import 'package:sistem_weatherv2/screens/users_screen/user_profile/edit_profile.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/instance_manager.dart';
 
+import 'package:sistem_weatherv2/routes/routes.dart';
+
+import '../../../controller/productos_controller.dart';
 import '../../../models/nombreJass_model.dart';
 import '../../home_screen.dart';
 
@@ -19,16 +21,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final user = FirebaseAuth.instance.currentUser;
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('user').snapshots();
+
   final _nameController = TextEditingController();
   final _apellidoController = TextEditingController();
   final _emailController = TextEditingController();
   final _telefonoController = TextEditingController();
   final _jass = TextEditingController();
   final _rool = TextEditingController();
+
+  //  final calcProducts = Get.put(ProductosController());
+
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
       backgroundColor: const Color(0xff1F2432),
       appBar: AppBar(
@@ -287,6 +293,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     const CircularProgressIndicator();
     await FirebaseAuth.instance.signOut();
 
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const HomeScreen(),
@@ -420,7 +427,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ],
                     ),
-                    const Divider(),
+                    const Divider(
+                      color: Colors.amber,
+                      thickness: 2,
+                    ),
+                    const Text('Productos Asignados'),
+                    const Divider(
+                      color: Colors.amber,
+                      thickness: 2,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [

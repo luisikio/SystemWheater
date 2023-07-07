@@ -28,7 +28,7 @@ class _UserOperarioScreenState extends State<AtmScreen> {
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+    //print(wid);
     return Scaffold(
       backgroundColor: const Color(0xff1F2432),
       appBar: AppBar(
@@ -72,6 +72,7 @@ class _UserOperarioScreenState extends State<AtmScreen> {
     const CircularProgressIndicator();
     await FirebaseAuth.instance.signOut();
 
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (_) => const HomeScreen(),

@@ -75,10 +75,10 @@ class CalculatoreController extends GetxController {
 
     double result = (t1 + t2 + t3 + t4) / 4;
 
-    result > 0.1 ? caudalResult = volume / result : caudalResult = 0;
+    result > 0.1 ? caudalResult = (volume / result) : caudalResult = 0;
 
-    caudalResult = double.parse(result.toStringAsFixed(2));
-
+    caudalResult = double.parse(caudalResult.toStringAsFixed(2));
+    print(caudalResult);
     return caudalResult;
   }
 

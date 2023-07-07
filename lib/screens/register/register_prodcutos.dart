@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sistem_weatherv2/models/nombreJass_model.dart';
 
 import 'package:sistem_weatherv2/models/product_model.dart';
 import 'package:sistem_weatherv2/routes/routes.dart';
@@ -81,7 +80,7 @@ class _ProductosScreenState extends State<ProductosScreeen> {
     anio2 = _date2.year;
 
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 18, 21, 29),
       appBar: AppBar(

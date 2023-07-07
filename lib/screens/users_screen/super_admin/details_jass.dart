@@ -20,18 +20,18 @@ class _JassDetilsScreenState extends State<JassDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 18, 21, 29),
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        //padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         margin: wid > 900 && wid < 1300
             ? const EdgeInsets.symmetric(horizontal: 200)
             : wid > 1300 && wid < 1600
                 ? const EdgeInsets.symmetric(horizontal: 220)
                 : wid > 1600
                     ? const EdgeInsets.symmetric(horizontal: 500)
-                    : const EdgeInsets.symmetric(horizontal: 15)
+                    : const EdgeInsets.symmetric(horizontal: 0)
                         .copyWith(bottom: 10),
         child: CustomScrollView(
           slivers: [
@@ -73,7 +73,7 @@ class _JassDetilsScreenState extends State<JassDetailsScreen> {
                                   });
                                 },
                                 decoration: const InputDecoration(
-                                  hintText: 'Buscar',
+                                  hintText: 'Buscar: nombre',
                                 ),
                               ),
                             ),
@@ -83,12 +83,12 @@ class _JassDetilsScreenState extends State<JassDetailsScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 10),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: const [
+                                children: [
                                   Text('Caserio'),
                                   Text('Nombre'),
                                 ],
@@ -140,61 +140,56 @@ class _JassDetilsScreenState extends State<JassDetailsScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: ListTile(
-                      leading: Container(
-                        alignment: Alignment.centerLeft,
-                        height: double.infinity,
-                        width: 100,
-                        child: Text(data['caserio']),
-                      ),
-                      trailing: SizedBox(
-                        width: 150,
-                        height: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                '${data['nombre']}',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                            Expanded(
-                              child: IconButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    Routes.editjassDetails,
-                                    arguments: {
-                                      'departamento':
-                                          data['departamento'].toString(),
-                                      'provincia': data['provincia'].toString(),
-                                      'distrito': data['distrito'].toString(),
-                                      'caserio': data['caserio'].toString(),
-                                      'nombre': data['nombre'].toString(),
-                                      'totalFam': data['totalFam'].toString(),
-                                      'famSinCovertura':
-                                          data['famSinCovertura'].toString(),
-                                      'famCovertura':
-                                          data['famCovertura'].toString(),
-                                      'reconocimiento':
-                                          data['reconocimiento'].toString(),
-                                      'uid': data['uid'].toString(),
-                                      // 'jassDetails':
-                                      //     _jassDetails,
-                                    },
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  size: 28,
-                                  color: Colors.white,
+                      title: Row(
+                        children: [
+                          Expanded(child: Text(data['caserio'])),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${data['nombre']}',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
                                 ),
-                              ),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.editjassDetails,
+                                      arguments: {
+                                        'departamento':
+                                            data['departamento'].toString(),
+                                        'provincia':
+                                            data['provincia'].toString(),
+                                        'distrito': data['distrito'].toString(),
+                                        'caserio': data['caserio'].toString(),
+                                        'nombre': data['nombre'].toString(),
+                                        'totalFam': data['totalFam'].toString(),
+                                        'famSinCovertura':
+                                            data['famSinCovertura'].toString(),
+                                        'famCovertura':
+                                            data['famCovertura'].toString(),
+                                        'reconocimiento':
+                                            data['reconocimiento'].toString(),
+                                        'uid': data['uid'].toString(),
+                                        // 'jassDetails':
+                                        //     _jassDetails,
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    size: 28,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -217,61 +212,56 @@ class _JassDetilsScreenState extends State<JassDetailsScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: ListTile(
-                      leading: Container(
-                        alignment: Alignment.centerLeft,
-                        height: double.infinity,
-                        width: 100,
-                        child: Text(data['caserio']),
-                      ),
-                      trailing: SizedBox(
-                        width: 150,
-                        height: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                '${data['nombre']}',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                            Expanded(
-                              child: IconButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    Routes.editjassDetails,
-                                    arguments: {
-                                      'departamento':
-                                          data['departamento'].toString(),
-                                      'provincia': data['provincia'].toString(),
-                                      'distrito': data['distrito'].toString(),
-                                      'caserio': data['caserio'].toString(),
-                                      'nombre': data['nombre'].toString(),
-                                      'totalFam': data['totalFam'].toString(),
-                                      'famSinCovertura':
-                                          data['famSinCovertura'].toString(),
-                                      'famCovertura':
-                                          data['famCovertura'].toString(),
-                                      'reconocimiento':
-                                          data['reconocimiento'].toString(),
-                                      'uid': data['uid'].toString(),
-                                      // 'jassDetails':
-                                      //     _jassDetails,
-                                    },
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  size: 28,
-                                  color: Colors.white,
+                      title: Row(
+                        children: [
+                          Expanded(child: Text(data['caserio'])),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${data['nombre']}',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
                                 ),
-                              ),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.editjassDetails,
+                                      arguments: {
+                                        'departamento':
+                                            data['departamento'].toString(),
+                                        'provincia':
+                                            data['provincia'].toString(),
+                                        'distrito': data['distrito'].toString(),
+                                        'caserio': data['caserio'].toString(),
+                                        'nombre': data['nombre'].toString(),
+                                        'totalFam': data['totalFam'].toString(),
+                                        'famSinCovertura':
+                                            data['famSinCovertura'].toString(),
+                                        'famCovertura':
+                                            data['famCovertura'].toString(),
+                                        'reconocimiento':
+                                            data['reconocimiento'].toString(),
+                                        'uid': data['uid'].toString(),
+                                        // 'jassDetails':
+                                        //     _jassDetails,
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    size: 28,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

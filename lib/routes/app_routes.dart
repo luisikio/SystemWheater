@@ -4,7 +4,7 @@ import 'package:sistem_weatherv2/screens/register/register_jass.dart';
 import 'package:sistem_weatherv2/screens/register/register_prodcutos.dart';
 
 import 'package:sistem_weatherv2/screens/register/register_screen.dart';
-import 'package:sistem_weatherv2/screens/users_screen/atm/asignar_productsJass.dart';
+import 'package:sistem_weatherv2/screens/users_screen/atm/asignar_productsjass.dart';
 import 'package:sistem_weatherv2/screens/users_screen/atm/enviar_productos.dart';
 import 'package:sistem_weatherv2/screens/users_screen/home_screen_user.dart';
 import 'package:sistem_weatherv2/screens/users_screen/ing_especialista/details_cloracion.dart';

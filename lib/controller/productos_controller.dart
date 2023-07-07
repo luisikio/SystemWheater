@@ -1,4 +1,3 @@
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
 
 class ProductosController extends GetxController {
@@ -50,5 +49,10 @@ class ProductosController extends GetxController {
   addEquiCompra(String value) {
     equiComparador.value = value;
     return equiComparador.value;
+  }
+
+  addTotalCloracion(String value) {
+    total.value = value;
+    return total.value;
   }
 }

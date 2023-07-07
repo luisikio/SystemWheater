@@ -20,18 +20,16 @@ class _AsignarProdcJassScreenState extends State<AsignarProdcJassScreen> {
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 18, 21, 29),
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         margin: wid > 900 && wid < 1300
-            ? const EdgeInsets.symmetric(horizontal: 300)
+            ? const EdgeInsets.symmetric(horizontal: 200)
             : wid > 1300 && wid < 1600
-                ? const EdgeInsets.symmetric(horizontal: 320)
+                ? const EdgeInsets.symmetric(horizontal: 220)
                 : wid > 1600
-                    ? const EdgeInsets.symmetric(horizontal: 500)
-                    : const EdgeInsets.symmetric(horizontal: 15)
+                    ? const EdgeInsets.symmetric(horizontal: 600)
+                    : const EdgeInsets.symmetric(horizontal: 0)
                         .copyWith(bottom: 10),
         child: CustomScrollView(
           slivers: [
@@ -40,10 +38,10 @@ class _AsignarProdcJassScreenState extends State<AsignarProdcJassScreen> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) => SizedBox(
-                  height: 400,
+                  height: 450,
                   child: ListView(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 30),
                     children: [
                       Container(
                         padding: const EdgeInsets.all(15),
@@ -84,14 +82,23 @@ class _AsignarProdcJassScreenState extends State<AsignarProdcJassScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 10),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: const [
-                                  Text('Caserio'),
-                                  Text('Nombre'),
+                                children: [
+                                  Expanded(child: Text('Caserio')),
+                                  Expanded(
+                                      child: Text(
+                                    'Nombre',
+                                    textAlign: TextAlign.center,
+                                  )),
+                                  Expanded(
+                                      child: Text(
+                                    'Asignar',
+                                    textAlign: TextAlign.right,
+                                  )),
                                 ],
                               ),
                             ),
@@ -148,55 +155,38 @@ class _AsignarProdcJassScreenState extends State<AsignarProdcJassScreen> {
                             child: Text(data['caserio']),
                           ),
                           Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  data['nombre'],
-                                  style: const TextStyle(fontSize: 15),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      Routes.enviarProdsJass,
-                                      arguments: {
-                                        'cloro': data['cloro'].toString(),
-                                        'reactivo': data['reactivo'].toString(),
-                                        'epp': data['epp'].toString(),
-                                        'balde5l': data['balde'].toString(),
-                                        'balde20l': data['balde20'].toString(),
-                                        'mangeras':
-                                            data['mangueras'].toString(),
-                                        'carretillas':
-                                            data['carretilla'].toString(),
-                                        'eqComp': data['equiComp'].toString(),
-
-                                        // 'provincia':
-                                        //     data['provincia'].toString(),
-                                        // 'distrito': data['distrito'].toString(),
-                                        // 'caserio': data['caserio'].toString(),
-                                        // 'nombre': data['nombre'].toString(),
-                                        // 'totalFam': data['totalFam'].toString(),
-                                        // 'famSinCovertura':
-                                        //     data['famSinCovertura'].toString(),
-                                        // 'famCovertura':
-                                        //     data['famCovertura'].toString(),
-                                        // 'reconocimiento':
-                                        //     data['reconocimiento'].toString(),
-                                        'uid': data['uid'].toString(),
-                                        // 'jassDetails':
-                                        //     _jassDetails,
-                                      },
-                                    );
+                            child: Text(
+                              data['nombre'],
+                              style: const TextStyle(fontSize: 15),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Expanded(
+                            child: IconButton(
+                              alignment: Alignment.centerRight,
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.enviarProdsJass,
+                                  arguments: {
+                                    'cloro': data['cloro'].toString(),
+                                    'reactivo': data['reactivo'].toString(),
+                                    'epp': data['epp'].toString(),
+                                    'balde5l': data['balde'].toString(),
+                                    'balde20l': data['balde20'].toString(),
+                                    'mangeras': data['mangueras'].toString(),
+                                    'carretillas':
+                                        data['carretilla'].toString(),
+                                    'eqComp': data['equiComp'].toString(),
+                                    'uid': data['uid'].toString(),
                                   },
-                                  icon: const Icon(
-                                    Icons.share,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.share,
+                                size: 20,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],
@@ -223,58 +213,46 @@ class _AsignarProdcJassScreenState extends State<AsignarProdcJassScreen> {
                     ),
                     child: ListTile(
                       title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Text(
-                                data['caserio'],
-                              ),
+                            child: Text(data['caserio']),
+                          ),
+                          Expanded(
+                            child: Text(
+                              data['nombre'],
+                              style: const TextStyle(fontSize: 15),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                           Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  data['nombre'],
-                                  style: const TextStyle(fontSize: 15),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    // Navigator.pushNamed(
-                                    //   context,
-                                    //   Routes.editjassDetails,
-                                    //   arguments: {
-                                    //     'departamento':
-                                    //         data['departamento'].toString(),
-                                    //     'provincia':
-                                    //         data['provincia'].toString(),
-                                    //     'distrito': data['distrito'].toString(),
-                                    //     'caserio': data['caserio'].toString(),
-                                    //     'nombre': data['nombre'].toString(),
-                                    //     'totalFam': data['totalFam'].toString(),
-                                    //     'famSinCovertura':
-                                    //         data['famSinCovertura'].toString(),
-                                    //     'famCovertura':
-                                    //         data['famCovertura'].toString(),
-                                    //     'reconocimiento':
-                                    //         data['reconocimiento'].toString(),
-                                    //     'uid': data['uid'].toString(),
-                                    //     // 'jassDetails':
-                                    //     //     _jassDetails,
-                                    //   },
-                                    // );
+                            child: IconButton(
+                              alignment: Alignment.centerRight,
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.enviarProdsJass,
+                                  arguments: {
+                                    'cloro': data['cloro'].toString(),
+                                    'reactivo': data['reactivo'].toString(),
+                                    'epp': data['epp'].toString(),
+                                    'balde5l': data['balde'].toString(),
+                                    'balde20l': data['balde20'].toString(),
+                                    'mangeras': data['mangueras'].toString(),
+                                    'carretillas':
+                                        data['carretilla'].toString(),
+                                    'eqComp': data['equiComp'].toString(),
+                                    'uid': data['uid'].toString(),
                                   },
-                                  icon: const Icon(
-                                    Icons.check,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.share,
+                                size: 20,
+                                color: Colors.white,
+                              ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -443,9 +421,9 @@ class _AsignarProdcJassScreenState extends State<AsignarProdcJassScreen> {
                       thickness: 2,
                       color: Colors.amber,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         Text(
                           'Productos Asignados: ',
                           maxLines: 3,

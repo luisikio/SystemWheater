@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/nombreJass_model.dart';
-
 class EditProfileOperarioScreen extends StatefulWidget {
   const EditProfileOperarioScreen({Key? key}) : super(key: key);
 
@@ -26,7 +24,6 @@ class _EditProfileOperarioScreenState extends State<EditProfileOperarioScreen> {
     final String uid2 = arguments2?['uid'];
 
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
 
     return Scaffold(
         backgroundColor: const Color(0xff1F2432),

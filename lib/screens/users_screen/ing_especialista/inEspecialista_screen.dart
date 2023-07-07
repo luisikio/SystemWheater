@@ -1,8 +1,9 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:sistem_weatherv2/widgets/cardView.dart';
 
 import '../../../models/user_model.dart';
 import '../../../routes/routes.dart';
@@ -51,7 +52,7 @@ class _UserOperarioScreenState extends State<IngEspecialistaScreen> {
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('ing especialista'),
@@ -199,6 +200,7 @@ class _UserOperarioScreenState extends State<IngEspecialistaScreen> {
     const CircularProgressIndicator();
     await FirebaseAuth.instance.signOut();
 
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (_) => const HomeScreen(),

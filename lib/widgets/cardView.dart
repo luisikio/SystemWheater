@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -19,6 +21,7 @@ class cardView extends StatelessWidget {
   final Stream<QuerySnapshot<Object?>> _usersStream;
   final Stream<QuerySnapshot<Object?>> _usersStream2;
 
+  // ignore: prefer_typing_uninitialized_variables
   final rool;
 
   @override

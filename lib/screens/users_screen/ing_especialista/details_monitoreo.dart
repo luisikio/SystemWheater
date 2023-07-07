@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/cloracion_model.dart';
 import '../../../models/monitoreo_model.dart';
 
 class DetailsMonitoreoScreen extends StatefulWidget {
@@ -20,7 +19,7 @@ class _DetailsMonitoreoScreenState extends State<DetailsMonitoreoScreen> {
   @override
   Widget build(BuildContext context) {
     final wid = MediaQuery.of(context).size.width;
-    print(wid);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Monitoreo'),
@@ -81,12 +80,12 @@ class _DetailsMonitoreoScreenState extends State<DetailsMonitoreoScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 10),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: const [
+                                children: [
                                   Text('Nombre'),
                                   Text('Fecha'),
                                 ],
@@ -126,8 +125,6 @@ class _DetailsMonitoreoScreenState extends State<DetailsMonitoreoScreen> {
               Timestamp date = data['fecha'];
               DateTime datatime = date.toDate();
 
-              String documentId = document.id;
-
               final year = datatime.year;
               final month = datatime.month;
               final day = datatime.day;
@@ -143,7 +140,6 @@ class _DetailsMonitoreoScreenState extends State<DetailsMonitoreoScreen> {
               hrs.length == 1 ? hrs = '0$hrs' : hrs = hrs;
               minutos.length == 1 ? minutos = '0$minutos' : minutos = minutos;
 
-              String horas = '$hrs:$minutos';
               String a = datatime.toString();
               String firstTenCharacters = a.substring(0, 10);
               //////
